@@ -12,8 +12,30 @@ public class BankOCR {
 	public static void main(String[] args) {
 
 		
-		String path = "C:\\bank_ocr_dojo_us3";		
+		String path = "C:\\bank_ocr_dojo_us1";		
 		
+		
+				//CASE 1
+	/*	
+		AccountNumber number;
+		for (int i = 0; i < accNumbersCounter(path); i++) {
+			number = new AccountNumber(path, i);
+			System.out.println(number.getNumber());
+			System.out.println(number.getActual());
+		}
+	*/	
+		
+		/*			//CASE 3
+		AccountNumber number;
+		for (int i = 0; i < accNumbersCounter(path); i++) {
+			number = new AccountNumber(path, i);
+			System.out.println(number.getNumber());
+			System.out.println(number.getActualNumberAndCheckSum());
+		}
+		
+	    */
+		
+		//			CASE4
 		findNumbers(path);
 		
 	}
@@ -74,7 +96,7 @@ public class BankOCR {
 			AccountNumber number = new AccountNumber(path, n);
 			ambList.clear();
 			System.out.print(number.getNumber());
-	
+			
 			if(number.getActual().contains("?")) {
 				Pattern findQuestionMark = Pattern.compile("([?])"); 
 				Matcher matcher = findQuestionMark.matcher(number.getActual());
@@ -91,8 +113,12 @@ public class BankOCR {
 			}
 			
 			if(number.checkSum().equals("ERR")) {
+				
 				for(int numDigitIndex = 0; numDigitIndex < number.length(); numDigitIndex++) {
-					ambList.addAll(findNumbersList(numDigitIndex,number));
+					ambList.addAll(findNumbersList(numDigitIndex, number));
+				}
+				if (ambList.isEmpty()) {
+					ambList.add(number.getActualNumberAndCheckSum());
 				}
 			}
 			
@@ -129,6 +155,7 @@ public class BankOCR {
 							AccountNumber helper = new AccountNumber(number.replaceDigit(numDigitIndex, d));
 							if(!helper.checkSum().equals("ERR")) {
 								newNumbers.add(helper.getActual());
+								
 							}  
 						}
 					}
@@ -168,8 +195,10 @@ public class BankOCR {
 				}
 			}
 		}
-		if(newNumbers.isEmpty() && !number.checkSum().equals("ERR"))
-			newNumbers.add(number.getActualNumberAndCheckSum());
+//		if(newNumbers.isEmpty() && !number.checkSum().equals("ERR")) {
+//			newNumbers.add(number.getActualNumberAndCheckSum());
+//		} 
+		
 		
 		return newNumbers;
 	}
